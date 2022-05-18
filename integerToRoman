@@ -1,0 +1,54 @@
+public class Solution {
+    public string IntToRoman(int num) {
+        string roman = "";
+        
+        string numString = num.ToString();
+        int siffer = 0;
+        for (int i = numString.Length - 1; i >= 0 ; i--)
+        {
+            siffer += 1;
+            
+            switch (siffer)
+            {
+                case 1:
+                    roman = RomanPart(numString[i], "X", "V", "I") + roman;
+                    break;
+                case 2: 
+                    roman = RomanPart(numString[i], "C", "L", "X") + roman;
+                    break;
+                case 3:
+                    roman = RomanPart(numString[i], "M", "D", "C") + roman;
+                    break;
+                case 4:
+                    roman = RomanPart(numString[i], "To much", "To much", "M") + roman;
+                    break;
+            }
+        }
+    return roman;
+    }
+    
+    public string RomanPart(char siffer, string  ten, string five, string one){
+        switch (siffer)
+        {
+            case '9':
+                return one + ten;
+            case '8':
+                return five + one + one + one;
+            case '7':
+                return five + one + one;
+            case '6':
+                return five + one;
+            case '5':
+                return five;
+            case '4':
+                return one + five;
+            case '3':
+                return one + one + one;
+            case '2':
+                return one + one;
+            case '1':
+                return one; 
+        }
+        return "";
+    }
+}

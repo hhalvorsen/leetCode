@@ -1,0 +1,31 @@
+public class Solution {
+    public int RomanToInt(string s) {
+        Dictionary<char, int> romanValues = new Dictionary<char, int>();
+        romanValues.Add('I', 1);
+        romanValues.Add('V', 5);
+        romanValues.Add('X', 10);
+        romanValues.Add('L', 50);
+        romanValues.Add('C', 100);
+        romanValues.Add('D', 500);
+        romanValues.Add('M', 1000);
+        
+        int sum = 0;
+        int prev = 0;
+        
+        for (int i = s.Length - 1; i >= 0; i--)
+        {
+            if (romanValues[s[i]] < prev)
+            {
+                sum -= romanValues[s[i]];
+            }
+            else
+            {
+                sum += romanValues[s[i]];
+            }
+            
+            prev = romanValues[s[i]];
+        }
+        
+        return sum;
+    }
+}
