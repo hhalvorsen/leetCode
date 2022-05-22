@@ -1,9 +1,10 @@
-﻿public class Program {
+﻿using System.Text.RegularExpressions;
+public class Solution {
 
     static void Main(string[] args)
         {
             Solution test = new Solution();
-            Console.WriteLine(test.NumberToWords(400003));
+            Console.WriteLine(test.NumberToWords(1000000));
         }
 
     public string NumberToWords(int num) {
@@ -46,34 +47,50 @@
             {6, "Sixty"},
             {7, "Seventy"},
             {8, "Eighty"},
-            {9, "Ninty"},
+            {9, "Ninety"},
         };
 
-        // int[] powerOfTenDenominators = {1000, 1000, 1000000, 1000000000};
-        string[] powerOfTenWords = {"Hundred", "Thousand", "Million", "Billion"};   
+        string[] powerOfTenWords = {"", "Thousand", "Million", "Billion"};   
 
         // Check if 0
         if (num == 0)
         {
             return "Zero";
         }
-
-        // Check for teens
-        integerWord = DigitText(ref num, teens, 100, 10, 19);
-
-        // If not teens, check last digit
-        if (integerWord.Length == 0){
-            integerWord = DigitText(ref num, oneDigit, 10, 1, 9);
-            // Find two digit word
-            integerWord = DigitText(ref num, twoDigit, 10, 2, 9) + " " + integerWord;
-        }
        
         int runs = 0;
         string tempWord;
+        string hundreds;
         while (num > 0 && runs < 10)
         {
             tempWord = "";
-            tempWord = DigitText(ref num, oneDigit, 10, 1, 9);
+            hundreds = "";
+            // Check for teens
+            tempWord = DigitText(ref num, teens, 100, 10, 19);
+
+            // If not teens, check last digit
+            if (tempWord.Length == 0)
+            {
+                tempWord = DigitText(ref num, oneDigit, 10, 1, 9);
+                // Find two digit word
+                if (tempWord.Length > 0)
+                {
+                    tempWord = DigitText(ref num, twoDigit, 10, 2, 9) + " " + tempWord;
+                }
+                else 
+                {
+                    tempWord = DigitText(ref num, twoDigit, 10, 2, 9);
+                }
+                
+            }
+
+            // Check for hundreds
+            hundreds = DigitText(ref num, oneDigit, 10, 1, 9);
+            if (hundreds.Length > 0)
+            {
+                tempWord = hundreds + " Hundred " + tempWord;
+            }
+
             if (tempWord.Length > 0)
             {
                 integerWord = tempWord + " " + powerOfTenWords[runs]+ " " + integerWord;
@@ -84,7 +101,9 @@
         if (runs == 10){return "Max Runs";}
 
         integerWord = integerWord.Trim();
-        integerWord = integerWord.Replace("  ", " ");
+        RegexOptions options = RegexOptions.None;
+        Regex regex = new Regex("[ ]{2,}", options);     
+        integerWord = regex.Replace(integerWord, " ");
         return integerWord;
     }
 
@@ -97,9 +116,8 @@
             number -= modulo;
             number = number/denominator;
         }
-        else if (modulo == 0)
+        else if (modulo == 0 && denominator != 100)
         {
-            number -= modulo;
             number = number/denominator;
         }
             
